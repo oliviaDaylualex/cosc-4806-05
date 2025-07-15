@@ -6,6 +6,21 @@ class User {
     public function __construct() {
         $this->db = db_connect();
     }
+    public function create($username, $password, $role = 'user')
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO users (username, password_hash, created_at, role)
+            VALUES (:username, :hash, NOW(), :role)
+        ");
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        return $stmt->execute([
+            'username' => $username,
+            'hash'     => $hash,
+            'role'     => $role
+        ]);
+    }
+
 
     public function findByUsername(string $u): ?array {
         $stmt = $this->db->prepare("

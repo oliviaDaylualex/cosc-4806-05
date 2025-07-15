@@ -4,20 +4,25 @@ class Verify extends Controller {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('/login');
         }
+
         $u     = trim($_POST['username'] ?? '');
-        $pw    = $_POST['password']   ?? '';
+        $pw    = $_POST['password'] ?? '';
         $userM = $this->model('User');
-        $lastFail = $userM->getLastFailed($u);
-        if ($lastFail && time() < strtotime($lastFail) + 60) {
-            $wait = (strtotime($lastFail) + 60) - time();
+
+
+        $fails = $userM->getLastFailed($u, 60);
+        if ($fails >= 3) {
+            $lastFail  = $userM->getLastFailed($u);
+            $remaining = (strtotime($lastFail) + 60) - time();
             $this->view('login/index', [
-                'error'    => "Account locked. Try again in {$wait}s.",
+                'error'    => "Account locked. Try again in {$remaining}s.",
                 'username' => $u
             ]);
             return;
         }
+
         $user = $userM->findByUsername($u);
-        if (! $user || ! password_verify($pw, $user['password_hash'])) {
+        if (!$user || !password_verify($pw, $user['password_hash'])) {
             $userM->recordLoginAttempt($u, 'failure');
             $this->view('login/index', [
                 'error'    => 'Invalid credentials.',
@@ -25,14 +30,16 @@ class Verify extends Controller {
             ]);
             return;
         }
+
+
         $userM->recordLoginAttempt($u, 'success');
 
         $_SESSION['auth'] = [
-            'id'        => $user['id'],
-            'username'  => $user['username'],
-            'role'      => $user['role'] ?? 'user',
-            'login_time'=> date('Y-m-d H:i:s')
+            'id'       => $user['id'],
+            'username' => $user['username'],
+            'role'     => $user['role'], 
         ];
+
         $this->redirect('/home');
     }
 }
