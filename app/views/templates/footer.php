@@ -4,7 +4,7 @@
             <div class="row text-center text-md-start">
 
                 <div class="col-md-4 mb-3 mb-md-0">
-                    <h5 class="mb-1">PromptMe</h5>
+                    <h5 class="mb-1">Remindly</h5>
                     <small>&copy; <?php echo date('Y'); ?> Remindly - All rights reserved.</small>
                 </div>
 
