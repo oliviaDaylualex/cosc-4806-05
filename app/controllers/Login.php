@@ -1,3 +1,4 @@
+
 <?php
 class Login extends Controller {
 		public function index(array $data = []): void {
@@ -12,6 +13,7 @@ class Login extends Controller {
 				$u     = trim($_POST['username'] ?? '');
 				$pw    = $_POST['password']      ?? '';
 				$userM = $this->model('User');
+
 
 				$lastFail = $userM->getLastFailed($u);
 				if ($lastFail && time() < strtotime($lastFail) + 60) {
@@ -33,11 +35,20 @@ class Login extends Controller {
 						return;
 				}
 
-				$userM->recordLoginAttempt($u, 'success');
-				$_SESSION['user_id']    = $user['id'];
-				$_SESSION['username']   = $u;
-				$_SESSION['login_time'] = date('Y-m-d H:i:s');
 
-				$this->redirect('/home');
+				$userM->recordLoginAttempt($u, 'success');
+				$userM->incrementLoginCount((int)$user['id']);
+
+				$_SESSION['auth']       = true;
+				$_SESSION['user_id']    = $user['id'];
+				$_SESSION['username']   = $user['username'];
+				$_SESSION['is_admin']   = (bool)$user['is_admin'];
+
+				$this->redirect('/reminders');
+		}
+
+		public function logout(): void {
+				session_destroy();
+				$this->redirect('/login');
 		}
 }
