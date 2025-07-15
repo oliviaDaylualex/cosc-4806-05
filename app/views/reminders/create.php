@@ -1,36 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=1024">
-  <title>Create Reminder</title>
-  <link rel="stylesheet" href="/public/css/style.css">
-</head>
-<body>
-  
+<?php require __DIR__ . '/../templates/header.php'; ?>
 
-  <div class="container">
-    <h2>Create a Reminder</h2>
+<div class="container">
+  <div class="card reminder-card shadow p-4" style="max-width:400px; margin:6rem auto 0 auto;">
+    <h2 class="mb-4 text-center">Create a Reminder</h2>
 
     <?php if (!empty($error)): ?>
-      <p class="error"><?= htmlspecialchars($error) ?></p>
+      <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <form method="post" action="/reminders/create">
-      <label>Subject</label>
-      <input
-        type="text"
-        name="subject"
-        required
-        value="<?= htmlspecialchars($subject ?? '') ?>"
-      >
-      <button type="submit">Save</button>
+      <div class="mb-3">
+        <label for="subject" class="form-label">Subject</label>
+        <input
+          type="text"
+          class="form-control"
+          name="subject"
+          id="subject"
+          required
+          value="<?= htmlspecialchars($subject ?? '') ?>"
+          autofocus
+        >
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Save</button>
     </form>
 
-    <p><a href="/reminders">Back to list</a></p>
+    <p class="mt-3 text-center">
+      <a href="/reminders">Back to list</a>
+    </p>
   </div>
+</div>
 
- 
-  </script>
-</body>
-</html>
+<?php require __DIR__ . '/../templates/footer.php'; ?>
