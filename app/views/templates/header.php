@@ -10,6 +10,7 @@ $username = $_SESSION['auth']['username'];
 <html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/style.css">
     <link rel="icon" href="/favicon.png">
     <title>Private - COSC 4806</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
