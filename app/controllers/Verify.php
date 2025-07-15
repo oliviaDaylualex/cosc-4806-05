@@ -26,9 +26,13 @@ class Verify extends Controller {
             return;
         }
         $userM->recordLoginAttempt($u, 'success');
-        $_SESSION['user_id']    = $user['id'];
-        $_SESSION['username']   = $u;
-        $_SESSION['login_time'] = date('Y-m-d H:i:s');
+
+        $_SESSION['auth'] = [
+            'id'        => $user['id'],
+            'username'  => $user['username'],
+            'role'      => $user['role'] ?? 'user',
+            'login_time'=> date('Y-m-d H:i:s')
+        ];
         $this->redirect('/home');
     }
 }
